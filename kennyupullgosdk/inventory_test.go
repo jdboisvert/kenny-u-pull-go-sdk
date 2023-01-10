@@ -6,13 +6,15 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestService_GetInventory(t *testing.T) {
-	GetInventory(InventorySearch{
+func Test_GetInventory_NotEmpty(t *testing.T) {
+	inventorySearch := InventorySearch{
 		Year:   "2010",
-		Make:   "honda",
-		Model:  "civic",
+		Make:   "lexus",
+		Model:  "is-250",
 		Branch: "all-branches",
-	})
+	}
 
-	assert.Equal(t, "3", 4, "Somehow 2 + 2 does not equal 4")
+	inventoryListings, err := GetInventory(inventorySearch)
+	assert.Nil(t, err)
+	assert.NotEmpty(t, inventoryListings)
 }

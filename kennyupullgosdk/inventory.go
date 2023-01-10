@@ -15,6 +15,7 @@ type InventoryListing struct {
 	DateListed string
 	RowID      string
 	Branch     string
+	ListingUrl string
 }
 
 type InventorySearch struct {
@@ -24,7 +25,7 @@ type InventorySearch struct {
 	Branch string
 }
 
-func GetInventory(inventorySearch InventorySearch) ([]InventoryListing, error) {
+func getInventoryFromPage(inventorySearch *InventorySearch, page int16) ([]InventoryListing, error) {
 	branch := "all-branches"
 	if inventorySearch.Branch != "" {
 		branch = inventorySearch.Branch
@@ -37,35 +38,52 @@ func GetInventory(inventorySearch InventorySearch) ([]InventoryListing, error) {
 		"nb_items":   {"42"}, // this is the number of items per page by default
 
 	}
-	response, _ := http.Get("https://kennyupull.com/auto-parts/our-inventory/page/1/?" + params.Encode())
-	// fmt.Println("HERE")
-	// fmt.Println(response.StatusCode)
-	// fmt.Println(response)
+	url := fmt.Sprintf("https://kennyupull.com/auto-parts/our-inventory/page/%d/?%s", page, params.Encode())
+	response, _ := http.Get(url)
 
-	// defer response.Body.Close()
-
-	// if response.StatusCode == http.StatusOK {
-	// 	bodyBytes, err := io.ReadAll(response.Body)
-	// 	if err != nil {
-	// 		log.Fatal(err)
-	// 	}
-	// 	bodyString := string(bodyBytes)
-
-	// 	fmt.Println(bodyString)
-	// }
+	inventoryListings := []InventoryListing{}
 
 	doc, _ := goquery.NewDocumentFromReader(response.Body)
-	doc.Find(".product-info .title").Each(func(_ int, tag *goquery.Selection) {
+	doc.Find(".product-info").Each(func(_ int, tag *goquery.Selection) {
+		infosDateTag := tag.Find(".infos .infos--date .date.info")
+		datedListed := infosDateTag.First().Text()
+		rowID := infosDateTag.Last().Text()
 
-		text := tag.Text()
-		fmt.Printf("%s\n", text)
+		inventoryListing := InventoryListing{
+			Year:       tag.Find(".title .year").Text(),
+			Make:       tag.Find(".title .brand").Text(),
+			Model:      tag.Find(".title .model").Text(),
+			DateListed: datedListed,
+			RowID:      rowID,
+			Branch:     tag.Find(".infos .infos--branch .branch.info").Text(),
+			ListingUrl: tag.Find(".btn-wrapper a").AttrOr("href", ""),
+		}
+
+		inventoryListings = append(inventoryListings, inventoryListing)
 	})
 
-	doc.Find(".product-info .infos").Each(func(_ int, tag *goquery.Selection) {
+	return inventoryListings, nil
+}
 
-		text := tag.Text()
-		fmt.Printf("%s\n", text)
-	})
+func GetInventory(inventorySearch InventorySearch) ([]InventoryListing, error) {
+	inventoryListings := []InventoryListing{}
 
-	return []InventoryListing{}, nil
+	page := int16(1)
+	for {
+		inventoryListingsPage, err := getInventoryFromPage(&inventorySearch, page)
+		if err != nil {
+			return nil, err
+		}
+
+		inventoryListings = append(inventoryListings, inventoryListingsPage...)
+
+		if len(inventoryListingsPage) == 0 {
+			// No more pages to paginate through so exit loop
+			break
+		}
+
+		page++
+	}
+
+	return inventoryListings, nil
 }
