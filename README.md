@@ -1,4 +1,4 @@
-# Kenny U-Pull Go SDK v0.0.0
+# Kenny U-Pull Go SDK v0.1.0
 
 A Collection of useful Go functions and utilities to interact with Kenny U-Pull's API.
 
