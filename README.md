@@ -6,9 +6,7 @@ A Collection of useful Go functions and utilities to interact with Kenny U-Pull'
 
 ### Installation
 
-    ```bash
     go get github.com/jdboisvert/kenny-u-pull-go-sdk
-    ```
 
 ### Functions and Usage
 
@@ -16,29 +14,30 @@ A Collection of useful Go functions and utilities to interact with Kenny U-Pull'
 Used to get a list of inventory listings based on the search criteria provided from the Kenny U-Pull Website/API.
 This will include all the information about the vehicle and the branch it is located at.
 ##### Example
-    ```go
-    package main
+```go
+package main
 
-    import (
-        "fmt"
-        "github.com/jdboisvert/kenny-u-pull-go-sdk"
-    )
+import (
+	"fmt"
 
-    func main() {
-        inventorySearch := InventorySearch{
-            Year:   "2010",
-            Make:   "toyota",
-            Model:  "corolla",
-            Branch: "all-branches",  // Optional by default will be set to "all-branches"
-	    }
-        inventoryListings, err := GetInventory()
-        if err != nil {
-            panic(err)
-        }
-        fmt.Println(inventoryListings) // Should display all the InventoryListenings matching your search criteria
-    }
-    ```
+	kennyupull "github.com/jdboisvert/kenny-u-pull-go-sdk"
+)
 
+func main() {
+	inventorySearch := kennyupull.InventorySearch{
+		Year:   "2010",
+		Make:   "toyota",
+		Model:  "corolla",
+		Branch: "all-branches", // Optional by default will be set to "all-branches"
+	}
+	inventoryListings, err := kennyupull.GetInventory(inventorySearch)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(inventoryListings) // Should display all the InventoryListenings matching your search criteria
+}
+
+```
 
 ## Development
 
