@@ -13,10 +13,10 @@ A Collection of useful Go functions and utilities to interact with Kenny U-Pull'
     # install golang
     brew install golang
 
-    # install the golangci linter 
+    # install the golangci linter
     # more details: https://golangci-lint.run/
     brew install golangci-lint
-    
+
     # install pre-commit
     pip install pre-commit
     pre-commit install
@@ -47,15 +47,15 @@ GitHub Actions is configured to perform unit tests for all new PRs.
 
 It will also check if the version has been bumped. To do that, use `bumpver`:
 
-    # "patch" bumps are for minor non-breaking changes, hotfixes, 
+    # "patch" bumps are for minor non-breaking changes, hotfixes,
     # documentation updates, new tests, etc.
-    bumpver update --patch 
-    # or 
+    bumpver update --patch
+    # or
     bumper update -p
 
     # "minor" bumps are for significant backwards-compatible changes
     bumpver update --minor
-    # or 
+    # or
     bumper update -m
 
     # "major" bumps are for breaking changes
