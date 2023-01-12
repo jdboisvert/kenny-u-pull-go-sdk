@@ -40,7 +40,6 @@ func getInventoryFromPage(inventorySearch *InventorySearch, page int16) ([]Inven
 
 	}
 	url := fmt.Sprintf("https://kennyupull.com/auto-parts/our-inventory/page/%d/?%s", page, params.Encode())
-	fmt.Println(url)
 	response, _ := http.Get(url)
 
 	inventoryListings := []InventoryListing{}
@@ -78,9 +77,6 @@ func GetInventory(inventorySearch InventorySearch) ([]InventoryListing, error) {
 		}
 
 		inventoryListings = append(inventoryListings, inventoryListingsPage...)
-
-		fmt.Println(inventoryListings)
-
 		if len(inventoryListingsPage) == 0 {
 			// No more pages to paginate through so exit loop
 			break
