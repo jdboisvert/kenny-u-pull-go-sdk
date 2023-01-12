@@ -76,8 +76,7 @@ You can also run the tests locally:
 
 GitHub Actions is configured to perform unit tests for all new PRs.
 
-
-[![Go Report Card](https://goreportcard.com/badge/github.com/golang-standards/project-layout?style=flat-square)](https://goreportcard.com/report/github.com/jdboisvert/kenny-u-pull-go-sdk)
+[![Go Report Card](https://goreportcard.com/badge/github.com/jdboisvert/kenny-u-pull-go-sdk)](https://goreportcard.com/report/github.com/jdboisvert/kenny-u-pull-go-sdk)
 
 [![Go Doc](https://img.shields.io/badge/godoc-reference-blue.svg?style=flat-square)](https://github.com/jdboisvert/kenny-u-pull-go-sdk)
 
