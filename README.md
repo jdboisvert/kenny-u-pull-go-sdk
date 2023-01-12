@@ -76,22 +76,6 @@ You can also run the tests locally:
 
 GitHub Actions is configured to perform unit tests for all new PRs.
 
-It will also check if the version has been bumped. To do that, use `bumpver`:
-
-    # "patch" bumps are for minor non-breaking changes, hotfixes,
-    # documentation updates, new tests, etc.
-    bumpver update --patch
-    # or
-    bumper update -p
-
-    # "minor" bumps are for significant backwards-compatible changes
-    bumpver update --minor
-    # or
-    bumper update -m
-
-    # "major" bumps are for breaking changes
-    bumpver update --major
-
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/golang-standards/project-layout?style=flat-square)](https://goreportcard.com/report/github.com/jdboisvert/kenny-u-pull-go-sdk)
 
