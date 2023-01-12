@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"strings"
 
 	"github.com/PuerkitoBio/goquery"
 )
@@ -39,6 +40,7 @@ func getInventoryFromPage(inventorySearch *InventorySearch, page int16) ([]Inven
 
 	}
 	url := fmt.Sprintf("https://kennyupull.com/auto-parts/our-inventory/page/%d/?%s", page, params.Encode())
+	fmt.Println(url)
 	response, _ := http.Get(url)
 
 	inventoryListings := []InventoryListing{}
@@ -46,17 +48,17 @@ func getInventoryFromPage(inventorySearch *InventorySearch, page int16) ([]Inven
 	doc, _ := goquery.NewDocumentFromReader(response.Body)
 	doc.Find(".product-info").Each(func(_ int, tag *goquery.Selection) {
 		infosDateTag := tag.Find(".infos .infos--date .date.info")
-		datedListed := infosDateTag.First().Text()
-		rowID := infosDateTag.Last().Text()
+		datedListed := strings.TrimSpace(infosDateTag.First().Text())
+		rowID := strings.TrimSpace(infosDateTag.Last().Text())
 
 		inventoryListing := InventoryListing{
-			Year:       tag.Find(".title .year").Text(),
-			Make:       tag.Find(".title .brand").Text(),
-			Model:      tag.Find(".title .model").Text(),
+			Year:       strings.TrimSpace(tag.Find(".title .year").Text()),
+			Make:       strings.TrimSpace(tag.Find(".title .brand").Text()),
+			Model:      strings.TrimSpace(tag.Find(".title .model").Text()),
 			DateListed: datedListed,
 			RowID:      rowID,
-			Branch:     tag.Find(".infos .infos--branch .branch.info").Text(),
-			ListingUrl: tag.Find(".btn-wrapper a").AttrOr("href", ""),
+			Branch:     strings.TrimSpace(tag.Find(".infos .infos--branch .branch.info").Text()),
+			ListingUrl: strings.TrimSpace(tag.Find(".btn-wrapper a").AttrOr("href", "")),
 		}
 
 		inventoryListings = append(inventoryListings, inventoryListing)
@@ -76,6 +78,8 @@ func GetInventory(inventorySearch InventorySearch) ([]InventoryListing, error) {
 		}
 
 		inventoryListings = append(inventoryListings, inventoryListingsPage...)
+
+		fmt.Println(inventoryListings)
 
 		if len(inventoryListingsPage) == 0 {
 			// No more pages to paginate through so exit loop
