@@ -12,7 +12,8 @@ A Collection of useful Go functions and utilities to interact with Kenny U-Pull'
 
 #### GetInventory
 Used to get a list of inventory listings based on the search criteria provided from the Kenny U-Pull Website/API.
-This will include all the information about the vehicle and the branch it is located at.
+This will include all the information about the vehicle and the branch it is located at. It will always be searching from latest to oldest listings.
+
 ##### Example
 ```go
 package main
@@ -35,6 +36,41 @@ func main() {
 		panic(err)
 	}
 	fmt.Println(inventoryListings) // Should display all the InventoryListenings matching your search criteria
+}
+
+```
+
+#### GetLatestListings
+Used to get the latest inventory listings from the Kenny U-Pull Website/API.
+This will include all the information about the vehicle and the branch it is located at.
+
+##### Example
+```go
+package main
+
+import (
+	"fmt"
+
+	kennyupull "github.com/jdboisvert/kenny-u-pull-go-sdk"
+)
+
+func main() {
+	inventorySearch := kennyupull.InventorySearch{
+		Year:   "2010",
+		Make:   "toyota",
+		Model:  "corolla",
+		Branch: "all-branches", // Optional by default will be set to "all-branches"
+	}
+	inventoryListings, err := kennyupull.GetLatestListing(inventorySearch)
+	if err != nil {
+		// Error occurred while getting the inventory listing
+		panic(err)
+	}
+	if inventoryListings == nil {
+		panic("No inventory listings found for the given inventory search criteria")
+	}
+
+	fmt.Println(inventoryListings) // Should display the latest InventoryListening
 }
 
 ```
