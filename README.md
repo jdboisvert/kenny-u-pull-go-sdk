@@ -35,7 +35,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(inventoryListings) // Should display all the InventoryListenings matching your search criteria
+	fmt.Println(inventoryListings) // Should display all the InventoryListing(s) matching your search criteria
 }
 
 ```
@@ -70,7 +70,7 @@ func main() {
 		panic("No inventory listings found for the given inventory search criteria")
 	}
 
-	fmt.Println(inventoryListings) // Should display the latest InventoryListening
+	fmt.Println(inventoryListings) // Should display the latest InventoryListing matching your search criteria
 }
 
 ```
