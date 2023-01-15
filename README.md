@@ -40,8 +40,8 @@ func main() {
 
 ```
 
-#### GetLatestListings
-Used to get the latest inventory listings from the Kenny U-Pull Website/API.
+#### GetLatestListing
+Used to get the latest inventory listing from the Kenny U-Pull Website/API.
 This will include all the information about the vehicle and the branch it is located at.
 
 ##### Example
