@@ -32,11 +32,12 @@ func getInventoryFromPage(inventorySearch *InventorySearch, page int16) ([]Inven
 		branch = inventorySearch.Branch
 	}
 	params := url.Values{
-		"brand":      {inventorySearch.Make}, // "brand" is the name of the form field on the website for Make (eg. Honda)
-		"model":      {inventorySearch.Model},
-		"model_year": {inventorySearch.Year},
-		"branch[]":   {branch},
-		"nb_items":   {"42"}, // this is the number of items per page by default
+		"brand":                        {inventorySearch.Make}, // "brand" is the name of the form field on the website for Make (eg. Honda)
+		"model":                        {inventorySearch.Model},
+		"model_year":                   {inventorySearch.Year},
+		"branch[]":                     {branch},
+		"nb_items":                     {"42"},           // this is the number of items per page by default
+		"input-select-sort-1621685231": {"New+arrivals"}, // Always search by new arrivals by default
 
 	}
 	url := fmt.Sprintf("https://kennyupull.com/auto-parts/our-inventory/page/%d/?%s", page, params.Encode())
@@ -86,4 +87,18 @@ func GetInventory(inventorySearch InventorySearch) ([]InventoryListing, error) {
 	}
 
 	return inventoryListings, nil
+}
+
+func GetLatestListing(inventorySearch InventorySearch) (*InventoryListing, error) {
+	inventoryListings, err := getInventoryFromPage(&inventorySearch, 1)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(inventoryListings) == 0 {
+		// No listings are present return nil
+		return nil, nil
+	}
+
+	return &inventoryListings[0], nil
 }
