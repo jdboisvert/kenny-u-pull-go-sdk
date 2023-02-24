@@ -1,4 +1,4 @@
-# Kenny U-Pull Go SDK v0.2.0
+# Kenny U-Pull Go SDK v0.2.1
 
 A Collection of useful Go functions and utilities to interact with Kenny U-Pull's API.
 
@@ -107,6 +107,11 @@ All test files are named *_test.go. Github workflow automatically run the tests 
 You can also run the tests locally:
 
     go test ./...
+
+To run the tests with coverage:
+
+    go test -coverprofile=coverage.out ./...
+    go tool cover -html=coverage.out
 
 ### PRs and Releases
 
