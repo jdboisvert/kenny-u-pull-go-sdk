@@ -108,6 +108,11 @@ You can also run the tests locally:
 
     go test ./...
 
+To run the tests with coverage:
+
+    go test -coverprofile=coverage.out ./...
+    go tool cover -html=coverage.out
+
 ### PRs and Releases
 
 GitHub Actions is configured to perform unit tests for all new PRs.

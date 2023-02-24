@@ -2,8 +2,6 @@
 
 <!--- Detailed description of desired outcome --->
 
-- [ ] 🚨 Urgent
-- [ ] 🩹 Hotfix
 - [ ] 🪲 Bug
 - [ ] 🛠 Refactor
 - [ ] 🏗 Feature
