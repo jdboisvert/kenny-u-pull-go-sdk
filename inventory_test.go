@@ -179,6 +179,18 @@ func MockFirstPageBlank() {
 		BodyString(HTMLWithoutVehicleExample)
 }
 
+func MockHTTPInternalError() {
+	gock.New("https://kennyupull.com").
+		Get("auto-parts/our-inventory/page/1/").
+		Reply(500) // Simulate an Internal Server Error
+}
+
+func MockHTTPError() {
+	gock.New("https://kennyupull.com").
+		Get("auto-parts/our-inventory/page/1/").
+		ReplyError(fmt.Errorf("Error")) // Simulate an error (actual error not important)
+}
+
 func Test_GetInventory_SingleInventoryItem(t *testing.T) {
 	defer gock.Off()
 	MockPagingThroughInventory(2)
@@ -280,5 +292,71 @@ func Test_GetLatestListing_NoListingFound(t *testing.T) {
 	inventoryListing, err := GetLatestListing(inventorySearch)
 
 	assert.Nil(t, err)
+	assert.Nil(t, inventoryListing)
+}
+
+func Test_GetInventory_HTTPError(t *testing.T) {
+	defer gock.Off()
+	MockHTTPInternalError()
+	inventorySearch := InventorySearch{
+		Year:   "2010",
+		Make:   "lexus",
+		Model:  "is-250",
+		Branch: "all-branches",
+	}
+
+	inventoryListings, err := GetInventory(inventorySearch)
+
+	assert.Error(t, err)
+	assert.Nil(t, inventoryListings)
+}
+
+func Test_GetLatestListing_HTTPError(t *testing.T) {
+	defer gock.Off()
+	MockHTTPInternalError()
+	inventorySearch := InventorySearch{
+		Year:   "2010",
+		Make:   "lexus",
+		Model:  "is-250",
+		Branch: "all-branches",
+	}
+
+	inventoryListing, err := GetLatestListing(inventorySearch)
+
+	assert.Error(t, err)
+	assert.Nil(t, inventoryListing)
+}
+
+func Test_GetInventory_ErrorHandling(t *testing.T) {
+	defer gock.Off()
+	MockHTTPError()
+	inventorySearch := InventorySearch{
+		Year:   "2010",
+		Make:   "lexus",
+		Model:  "is-250",
+		Branch: "all-branches",
+	}
+
+	inventoryListings, err := GetInventory(inventorySearch)
+
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), "failed to get URL from Kenny U-Pull:")
+
+	assert.Nil(t, inventoryListings)
+}
+
+func Test_GetLatestListing_ErrorHandling(t *testing.T) {
+	defer gock.Off()
+	MockHTTPError()
+	inventorySearch := InventorySearch{
+		Year:   "2010",
+		Make:   "lexus",
+		Model:  "is-250",
+		Branch: "all-branches",
+	}
+
+	inventoryListing, err := GetLatestListing(inventorySearch)
+
+	assert.Error(t, err)
 	assert.Nil(t, inventoryListing)
 }
