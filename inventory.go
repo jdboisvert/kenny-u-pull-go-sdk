@@ -41,9 +41,17 @@ func getInventoryFromPage(inventorySearch *InventorySearch, page int16) ([]Inven
 
 	}
 	url := fmt.Sprintf("https://kennyupull.com/auto-parts/our-inventory/page/%d/?%s", page, params.Encode())
-	response, _ := http.Get(url)
+	response, err := http.Get(url)
 
 	inventoryListings := []InventoryListing{}
+	if err != nil {
+		return inventoryListings, fmt.Errorf("failed to get URL from Kenny U-Pull: %v", err)
+	}
+	defer response.Body.Close() // Close the response body when the function returns
+
+	if response.StatusCode != http.StatusOK {
+		return inventoryListings, fmt.Errorf("got non-200 status code: %d so returning None", response.StatusCode)
+	}
 
 	doc, _ := goquery.NewDocumentFromReader(response.Body)
 	doc.Find(".product-info").Each(func(_ int, tag *goquery.Selection) {
