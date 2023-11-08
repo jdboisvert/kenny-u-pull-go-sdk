@@ -5,7 +5,7 @@ go 1.17
 require (
 	github.com/PuerkitoBio/goquery v1.8.0
 	github.com/stretchr/testify v1.8.1
-	golang.org/x/net v0.6.0 // indirect
+	golang.org/x/net v0.17.0 // indirect
 )
 
 require github.com/h2non/gock v1.2.0
